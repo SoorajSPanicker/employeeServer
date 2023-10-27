@@ -1,4 +1,5 @@
 const admins = require("../models/adminModel");
+const employees = require("../models/employeeCollection");
 
 const adminLogin = async (req, res) => {
     const { email, psw } = req.body
@@ -22,5 +23,36 @@ const adminLogin = async (req, res) => {
 
     }
 }
-module.exports={adminLogin}
+
+const addEmployee = async (req, res) => {
+    const profile = ""
+    const { fname, lname, status, mobile, location, gender, email } = req.body
+    if (!fname || !lname || !status || !mobile || !location || !gender || !email || !profile) {
+        res.status(404).json("all datas are required")
+
+    }
+    else {
+        try {
+            let preEmployee = await employees.findOne({ email })
+            if (preEmployee) {
+                res.status(400).json("employee is already present")
+            }
+            else {
+                let newEmployee=new employees({
+                    fname, lname, status, mobile, location, gender, email
+                })
+                await newEmployee.save()
+                res.status(200).json(fname)
+
+
+            }
+        }
+        catch {
+            res.status(400).json("connection error")
+
+        }
+    }
+}
+
+module.exports = { adminLogin,addEmployee }
 
