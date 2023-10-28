@@ -25,7 +25,7 @@ const adminLogin = async (req, res) => {
 }
 
 const addEmployee = async (req, res) => {
-    const profile = ""
+    const profile = req.file.filename
     const { fname, lname, status, mobile, location, gender, email } = req.body
     if (!fname || !lname || !status || !mobile || !location || !gender || !email || !profile) {
         res.status(404).json("all datas are required")
