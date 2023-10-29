@@ -26,6 +26,9 @@ const adminLogin = async (req, res) => {
 
 const addEmployee = async (req, res) => {
     const profile = req.file.filename
+
+    console.log(profile);
+
     const { fname, lname, status, mobile, location, gender, email } = req.body
     if (!fname || !lname || !status || !mobile || !location || !gender || !email || !profile) {
         res.status(404).json("all datas are required")
@@ -38,8 +41,8 @@ const addEmployee = async (req, res) => {
                 res.status(400).json("employee is already present")
             }
             else {
-                let newEmployee=new employees({
-                    fname, lname, status, mobile, location, gender, email
+                let newEmployee = new employees({
+                    fname, lname, status, mobile, location, gender, email, profile
                 })
                 await newEmployee.save()
                 res.status(200).json(fname)
@@ -54,5 +57,5 @@ const addEmployee = async (req, res) => {
     }
 }
 
-module.exports = { adminLogin,addEmployee }
+module.exports = { adminLogin, addEmployee }
 
