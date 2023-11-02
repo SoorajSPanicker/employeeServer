@@ -109,5 +109,42 @@ const removeEmployee = async (req, res) => {
     }
 }
 
-module.exports = { adminLogin, addEmployee, getAllEmployees, getEmployee, removeEmployee }
+const updateEmployee = async (req, res) => {
+    //id
+    const { id } = req.params
+    //body
+    const { fname, lname, status, mobile, location, gender, email,user_profile } = req.body
+    const profile =req.file? req.file.filename:user_profile
+    try {
+        employee = await employees.findOne({ _id: id })
+        if (employee) {
+            employee.fname = fname
+            employee.lname = lname
+            employee.status = status
+            employee.mobile = mobile
+            employee.location = location
+            employee.gender = gender
+            employee.email = email
+            employee.profile = profile
+            await employee.save()
+            res.status(200).json(employee)
+
+
+        }
+        else {
+            res.status(404).json("employee not found")
+        }
+    }
+    catch {
+        res.status(400).json("connection error")
+    }
+}
+
+const filterEmployee=async(req,res)=>{
+    const {filterData} = req.query  //active/inactive
+    const femployees=await employees.find({status:filterData})
+    res.status(200).json(femployees)
+}
+
+module.exports = { adminLogin, addEmployee, getAllEmployees, getEmployee, removeEmployee, updateEmployee, filterEmployee }
 
